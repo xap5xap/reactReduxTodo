@@ -1,6 +1,6 @@
 
 import * as types from '../actions/actionTypes';
-import { todoReducer } from './todoReducer';
+import todoReducer from './todoReducer';
 
 export default function todosReducer(state = [], action) {
 
