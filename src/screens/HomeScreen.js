@@ -5,6 +5,7 @@ import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as types from '../actions/actionTypes';
 import FilterLink from '../components/FilterLink';
+import Todo from '../components/Todo';
 
 const getVisibleTodos = (todos, filter) => {
     switch (filter) {
@@ -37,25 +38,18 @@ class HomeScreen extends React.Component {
     };
 
     onPressTodo(rowData) {
-        console.log('onPressTodo', rowData);
         this.props.dispatch({ type: types.TOGGLE_TODO, id: rowData.id });
-        console.log('this.props constructor', this.props);
     }
 
     renderRowFunc(rowData) {
-        color = rowData.completed ? 'red' : 'black';
-        styleCompleted = {
-            color: 'red',
-            textDecorationLine: 'line-through'
-        }
         return (
-            <TouchableHighlight underlayColor='#ddd'
-                onPress={() => this.onPressTodo(rowData)}>
-                <View style={styles.row} >
-                    <Text style={rowData.completed ? styleCompleted : {}} > {rowData.text}</Text>
-                </View>
-            </TouchableHighlight >
+            <Todo rowData={rowData} onClick={() => this.onPressTodo(rowData)} />
         );
+
+    }
+
+    filterTodos(filter) {
+        this.props.dispatch({ type: 'SET_VISIBILITY_FILTER', filter });
     }
 
     render() {
@@ -72,9 +66,9 @@ class HomeScreen extends React.Component {
                     dataSource={this.props.datasource}
                     renderRow={this.renderRowFunc}
                 />
-                <FilterLink filter="SHOW_ALL" title="All" dispatch={this.props.dispatch} currentFilter={visibilityFilter} />
-                <FilterLink filter="SHOW_ACTIVE" title="Active" dispatch={this.props.dispatch} currentFilter={visibilityFilter} />
-                <FilterLink filter="SHOW_COMPLETED" title="Completed" dispatch={this.props.dispatch} currentFilter={visibilityFilter} />
+                <FilterLink filter="SHOW_ALL" onClick={() => this.filterTodos('SHOW_ALL')} title="All" currentFilter={visibilityFilter} />
+                <FilterLink filter="SHOW_ACTIVE" onClick={() => this.filterTodos('SHOW_ACTIVE')} title="Active" currentFilter={visibilityFilter} />
+                <FilterLink filter="SHOW_COMPLETED" onClick={() => this.filterTodos('SHOW_COMPLETED')} title="Completed" currentFilter={visibilityFilter} />
 
             </View>
         );
@@ -125,14 +119,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 5,
         borderStyle: 'solid',
     },
-    row: {
-        flex: 1,
-        flexDirection: 'row',
-        padding: 20,
-        alignItems: 'center',
-        borderColor: '#D7D7D7',
-        borderBottomWidth: 1,
-    },
+
 });
 
 export default connect(mapStateToProps)(HomeScreen);

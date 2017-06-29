@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Button, Text } from 'react-native';
 
-const FilterLink = ({ filter, title, currentFilter, dispatch }) => {
+const FilterLink = ({ filter, title, currentFilter, onClick }) => {
 
     if (filter === currentFilter) {
         return (
@@ -9,9 +9,7 @@ const FilterLink = ({ filter, title, currentFilter, dispatch }) => {
         );
     }
     return (
-        <Button title={title} onPress={() => {
-            dispatch({ type: 'SET_VISIBILITY_FILTER', filter })
-        }}></Button>
+        <Button title={title} onPress={onClick}></Button>
     );
 };
 
