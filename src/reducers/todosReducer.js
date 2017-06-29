@@ -1,6 +1,6 @@
 
 import * as types from '../actions/actionTypes';
-// import { todoReducer } from './todoReducer';
+import { todoReducer } from './todoReducer';
 
 export default function todosReducer(state = [], action) {
 
@@ -8,22 +8,12 @@ export default function todosReducer(state = [], action) {
         case types.ADD_TODO:
             return [
                 ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
+                todoReducer(undefined, action)
             ];
 
         case types.TOGGLE_TODO:
             return state.map(todo => {
-                if (todo.id !== action.id) {
-                    return todo;
-                }
-                return {
-                    ...todo,
-                    completed: !todo.completed
-                };
+                todoReducer(todo, action)
             });
 
 

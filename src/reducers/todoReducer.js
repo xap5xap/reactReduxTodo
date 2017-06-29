@@ -12,15 +12,13 @@ export default function todoReducer(state = [], action) {
             }
 
         case types.TOGGLE_TODO:
-            return state.map(todo => {
-                if (todo.id !== action.id) {
-                    return todo;
-                }
-                return {
-                    ...todo,
-                    completed: !todo.completed
-                };
-            });
+            if (state.id !== action.id) {
+                return state;
+            }
+            return {
+                ...state,
+                completed: !state.completed
+            };
 
 
         default:
