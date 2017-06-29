@@ -1,15 +1,19 @@
 
 import * as types from '../actions/actionTypes';
+// import { todoReducer } from './todoReducer';
 
-export default function todoReducer(state = [], action) {
+export default function todosReducer(state = [], action) {
 
     switch (action.type) {
         case types.ADD_TODO:
-            return {
-                id: action.id,
-                text: action.text,
-                completed: false
-            }
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ];
 
         case types.TOGGLE_TODO:
             return state.map(todo => {
