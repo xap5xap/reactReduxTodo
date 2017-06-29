@@ -18,14 +18,20 @@ class HomeScreen extends React.Component {
 
     componentDidMount() {
         const { store } = this.context;
-        store.dispatch({ type: 'ADD_TODO', id: '2', text: 'xap' });
-        console.log('estado mount home', store.getState());
+        this.unsubscribe = store.subscribe(() => {
+            console.log('entro a subscribe()');
+            this.forceUpdate();
+        });
         this.datasource = this.datasource.cloneWithRows(store.getState().todos);
     }
 
     static navigationOptions = {
         title: 'To Do Redux',
     };
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
 
     componentWillReceiveProps(nextProps) {
         const { store } = this.context;
@@ -59,10 +65,9 @@ class HomeScreen extends React.Component {
     }
 
     onAddTodoClick() {
-        console.log('click', this.input);
         const { store } = this.context;
         store.dispatch({ type: 'ADD_TODO', id: this.id++, text: this.input });
-        console.log(store.getState().todos);
+        // console.log(store.getState().todos);
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.datasource = ds.cloneWithRows(store.getState().todos);
 
