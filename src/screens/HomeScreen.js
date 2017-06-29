@@ -1,8 +1,9 @@
 
 import React, { PropTypes } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, ListView } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, ListView, TouchableHighlight } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import * as types from '../actions/actionTypes';
 
 class HomeScreen extends React.Component {
     id = 0;
@@ -11,6 +12,9 @@ class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.onTodoClick = this.onTodoClick.bind(this);
+        // this.onPressTodo = this.onPressTodo.bind(this);
+        this.renderRowFunc = this.renderRowFunc.bind(this);
+
         console.log('this.props constructor', this.props);
     }
 
@@ -18,11 +22,25 @@ class HomeScreen extends React.Component {
         title: 'To Do Redux',
     };
 
+    onPressTodo(rowData) {
+        console.log('onPressTodo', rowData);
+        this.props.dispatch({ type: types.TOGGLE_TODO, id: rowData.id });
+        console.log('this.props constructor', this.props);
+    }
+
     renderRowFunc(rowData) {
+        color = rowData.completed ? 'red' : 'black';
+        styleCompleted = {
+            color: 'red',
+            textDecorationLine: 'line-through'
+        }
         return (
-            <View style={styles.row}>
-                <Text >{rowData.text}</Text>
-            </View>
+            <TouchableHighlight underlayColor='#ddd'
+                onPress={() => this.onPressTodo(rowData)}>
+                <View style={styles.row} >
+                    <Text style={rowData.completed ? styleCompleted : {}} > {rowData.text}</Text>
+                </View>
+            </TouchableHighlight >
         );
     }
 

@@ -1,4 +1,3 @@
-
 import * as types from '../actions/actionTypes';
 import todoReducer from './todoReducer';
 
@@ -13,7 +12,7 @@ export default function todosReducer(state = [], action) {
 
         case types.TOGGLE_TODO:
             return state.map(todo => {
-                todoReducer(todo, action)
+                return todoReducer(todo, action)
             });
 
 
