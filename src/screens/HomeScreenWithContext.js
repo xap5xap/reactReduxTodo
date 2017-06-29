@@ -2,21 +2,46 @@
 import React, { PropTypes } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, ListView } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import { connect } from 'react-redux';
 
 class HomeScreen extends React.Component {
+
     id = 0;
     input = '';
+    datasource;
 
     constructor(props) {
         super(props);
-        this.onTodoClick = this.onTodoClick.bind(this);
+        this.onAddTodoClick = this.onAddTodoClick.bind(this);
         console.log('this.props constructor', this.props);
+        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+        this.datasource = ds;
+    }
+
+    componentDidMount() {
+        const { store } = this.context;
+        this.unsubscribe = store.subscribe(() => {
+            console.log('entro a subscribe()');
+            this.forceUpdate();
+        });
+        console.log('this.props componentDidMount', this.props);
+        this.datasource = this.datasource.cloneWithRows(store.getState().todos);
     }
 
     static navigationOptions = {
         title: 'To Do Redux',
     };
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { store } = this.context;
+        console.log('nextProps', nextProps);
+        console.log('this.datasource ', this.datasource);
+        console.log('estado mount home', store.getState());
+
+    }
 
     renderRowFunc(rowData) {
         return (
@@ -32,41 +57,28 @@ class HomeScreen extends React.Component {
                 <TextInput style={styles.input} onChangeText={(text) => {
                     this.input = text;
                 }}></TextInput>
-                <Button title="Add todo" onPress={this.onTodoClick} />
-
+                <Button title="Add todo" onPress={this.onAddTodoClick} />
                 <ListView
-                    dataSource={this.props.datasource}
+                    dataSource={this.datasource}
                     renderRow={this.renderRowFunc}
                 />
             </View>
         );
     }
 
-    onTodoClick() {
-        this.props.dispatch({ type: 'ADD_TODO', id: this.id++, text: this.input });
+    onAddTodoClick() {
+        const { store } = this.context;
+        store.dispatch({ type: 'ADD_TODO', id: this.id++, text: this.input });
+        // console.log(store.getState().todos);
+        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+        this.datasource = ds.cloneWithRows(store.getState().todos);
+
     }
 }
 
-const mapStateToProps = (state) => {
-
-    return {
-        todos: state.todos,
-        datasource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(state.todos)
-    };
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onTodoClick: (id, text) => {
-            dispatch({
-                type: 'ADD_TODO',
-                id,
-                text,
-            });
-        }
-    };
-};
-
+HomeScreen.contextTypes = {
+    store: PropTypes.object
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -91,5 +103,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(mapStateToProps)(HomeScreen);
-
+export default HomeScreen;
