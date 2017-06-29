@@ -4,6 +4,20 @@ import { View, Text, Button, StyleSheet, TextInput, ListView, TouchableHighlight
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as types from '../actions/actionTypes';
+import FilterLink from '../components/FilterLink';
+
+const getVisibleTodos = (todos, filter) => {
+    switch (filter) {
+        case 'SHOW_ALL':
+            return todos;
+
+        case 'SHOW_COMPLETED':
+            return todos.filter(t => t.completed);
+
+        case 'SHOW_ACTIVE':
+            return todos.filter(t => !t.completed);
+    }
+};
 
 class HomeScreen extends React.Component {
     id = 0;
@@ -45,6 +59,8 @@ class HomeScreen extends React.Component {
     }
 
     render() {
+        const { visibilityFilter } = this.props;
+
         return (
             <View style={styles.container}>
                 <TextInput style={styles.input} onChangeText={(text) => {
@@ -56,6 +72,10 @@ class HomeScreen extends React.Component {
                     dataSource={this.props.datasource}
                     renderRow={this.renderRowFunc}
                 />
+                <FilterLink filter="SHOW_ALL" title="All" dispatch={this.props.dispatch} currentFilter={visibilityFilter} />
+                <FilterLink filter="SHOW_ACTIVE" title="Active" dispatch={this.props.dispatch} currentFilter={visibilityFilter} />
+                <FilterLink filter="SHOW_COMPLETED" title="Completed" dispatch={this.props.dispatch} currentFilter={visibilityFilter} />
+
             </View>
         );
     }
@@ -65,11 +85,17 @@ class HomeScreen extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const dataSource = new ListView.DataSource({
+    rowHasChanged: (r1, r2) => r1 !== r2,
+});
 
+const mapStateToProps = (state, ownProps) => {
+    console.log('state', state);
+    console.log('ownProps', ownProps);
     return {
-        todos: state.todos,
-        datasource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(state.todos)
+        visibleTodos: getVisibleTodos(state.todos, state.visibilityFilter),
+        datasource: dataSource.cloneWithRows(getVisibleTodos(state.todos, state.visibilityFilter)),
+        visibilityFilter: state.visibilityFilter
     };
 };
 
