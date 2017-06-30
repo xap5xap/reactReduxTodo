@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
-import { TouchableHighlight, Text, View , StyleSheet} from 'react-native';
+import { TouchableHighlight, Text, View, StyleSheet } from 'react-native';
 
-const Todo = ({ rowData, onClick }) => {
+const Todo = ({ completed, text, onClick }) => {
 
-    color = rowData.completed ? 'red' : 'black';
+    color = completed ? 'red' : 'black';
     styleCompleted = {
         color: 'red',
         textDecorationLine: 'line-through'
@@ -12,14 +12,14 @@ const Todo = ({ rowData, onClick }) => {
         <TouchableHighlight underlayColor='#ddd'
             onPress={onClick}>
             <View style={styles.row} >
-                <Text style={rowData.completed ? styleCompleted : {}} > {rowData.text}</Text>
+                <Text style={completed ? styleCompleted : {}} > {text}</Text>
             </View>
         </TouchableHighlight >
     );
 };
 
 const styles = StyleSheet.create({
-   
+
     row: {
         flex: 1,
         flexDirection: 'row',

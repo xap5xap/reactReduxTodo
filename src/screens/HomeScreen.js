@@ -5,7 +5,7 @@ import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as types from '../actions/actionTypes';
 import FilterLink from '../components/FilterLink';
-import Todo from '../components/Todo';
+import TodoList from '../components/TodoList';
 
 const getVisibleTodos = (todos, filter) => {
     switch (filter) {
@@ -27,8 +27,8 @@ class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.onTodoClick = this.onTodoClick.bind(this);
-        // this.onPressTodo = this.onPressTodo.bind(this);
-        this.renderRowFunc = this.renderRowFunc.bind(this);
+        this.onPressTodo = this.onPressTodo.bind(this);
+        // this.renderRowFunc = this.renderRowFunc.bind(this);
 
         console.log('this.props constructor', this.props);
     }
@@ -38,15 +38,10 @@ class HomeScreen extends React.Component {
     };
 
     onPressTodo(rowData) {
+        console.log('llego', rowData);
         this.props.dispatch({ type: types.TOGGLE_TODO, id: rowData.id });
     }
 
-    renderRowFunc(rowData) {
-        return (
-            <Todo rowData={rowData} onClick={() => this.onPressTodo(rowData)} />
-        );
-
-    }
 
     filterTodos(filter) {
         this.props.dispatch({ type: 'SET_VISIBILITY_FILTER', filter });
@@ -62,10 +57,8 @@ class HomeScreen extends React.Component {
                 }}></TextInput>
                 <Button title="Add todo" onPress={this.onTodoClick} />
 
-                <ListView
-                    dataSource={this.props.datasource}
-                    renderRow={this.renderRowFunc}
-                />
+                <TodoList onPressTodo={this.onPressTodo} datasource={this.props.datasource} />
+
                 <FilterLink filter="SHOW_ALL" onClick={() => this.filterTodos('SHOW_ALL')} title="All" currentFilter={visibilityFilter} />
                 <FilterLink filter="SHOW_ACTIVE" onClick={() => this.filterTodos('SHOW_ACTIVE')} title="Active" currentFilter={visibilityFilter} />
                 <FilterLink filter="SHOW_COMPLETED" onClick={() => this.filterTodos('SHOW_COMPLETED')} title="Completed" currentFilter={visibilityFilter} />
