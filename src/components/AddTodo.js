@@ -1,14 +1,13 @@
 import React, { PropTypes } from 'react';
 import { TouchableHighlight, Button, Text, View, StyleSheet, ListView, TextInput } from 'react-native';
 import { connect } from 'react-redux';
+import {addTodo} from '../actions/addTodoActions';
 
-let id = 0;
 let AddTodo = ({ dispatch }) => {
     let input;
 
-
     onAddClick = (text) => {
-        dispatch({ type: 'ADD_TODO', id: id++, text: text });
+        dispatch(addTodo(text));
     }
     return (
         <View>
