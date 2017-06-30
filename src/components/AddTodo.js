@@ -1,9 +1,15 @@
 import React, { PropTypes } from 'react';
 import { TouchableHighlight, Button, Text, View, StyleSheet, ListView, TextInput } from 'react-native';
+import { connect } from 'react-redux';
 
-
-const AddTodo = ({ onAddClick }) => {
+let id = 0;
+let AddTodo = ({ dispatch }) => {
     let input;
+
+
+    onAddClick = (text) => {
+        dispatch({ type: 'ADD_TODO', id: id++, text: text });
+    }
     return (
         <View>
             <TextInput style={styles.input} onChangeText={(text) => {
@@ -24,4 +30,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default AddTodo;
+export default connect()(AddTodo);

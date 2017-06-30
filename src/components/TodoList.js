@@ -20,8 +20,6 @@ const getVisibleTodos = (todos, filter) => {
 
 const TodoList = (props) => {
     const { datasource } = props;
-    // const { visibleTodos } = this.props;
-
     const renderRowFunc = (rowData) => {
 
         console.log('rowData', rowData);
