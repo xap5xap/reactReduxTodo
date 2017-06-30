@@ -7,6 +7,7 @@ import * as types from '../actions/actionTypes';
 import FilterLink from '../components/FilterLink';
 import TodoList from '../components/TodoList';
 import AddTodo from '../components/AddTodo';
+import Footer from '../components/Footer';
 
 const getVisibleTodos = (todos, filter) => {
     switch (filter) {
@@ -53,14 +54,11 @@ class HomeScreen extends React.Component {
 
         return (
             <View style={styles.container}>
-                <AddTodo onAddClick={this.onAddClick}/>
+                <AddTodo onAddClick={this.onAddClick} />
 
                 <TodoList onPressTodo={this.onPressTodo} datasource={this.props.datasource} />
 
-                <FilterLink filter="SHOW_ALL" onClick={() => this.filterTodos('SHOW_ALL')} title="All" currentFilter={visibilityFilter} />
-                <FilterLink filter="SHOW_ACTIVE" onClick={() => this.filterTodos('SHOW_ACTIVE')} title="Active" currentFilter={visibilityFilter} />
-                <FilterLink filter="SHOW_COMPLETED" onClick={() => this.filterTodos('SHOW_COMPLETED')} title="Completed" currentFilter={visibilityFilter} />
-
+                <Footer visibilityFilter={visibilityFilter} onFilterClick={(filter) => this.filterTodos(filter)} />
             </View>
         );
     }
