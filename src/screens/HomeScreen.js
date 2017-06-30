@@ -5,7 +5,8 @@ import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import AddTodo from '../components/AddTodo';
 import Footer from '../components/Footer';
-import VisibleTodoList from '../components/VisibleTodoList';
+// import VisibleTodoList from '../components/VisibleTodoList';
+import TodoList from '../components/TodoList';
 
 
 class HomeScreen extends React.Component {
@@ -21,10 +22,11 @@ class HomeScreen extends React.Component {
     };
 
     render() {
+        console.log('this.store', this.store);
         return (
             <View style={styles.container}>
                 <AddTodo onAddClick={this.onAddClick} />
-                <VisibleTodoList />
+                <TodoList />
                 <Footer />
             </View>
         );
@@ -35,6 +37,9 @@ class HomeScreen extends React.Component {
     }
 }
 
+HomeScreen.contextTypes = {
+    store: PropTypes.object
+}
 
 const styles = StyleSheet.create({
     container: {
