@@ -1,21 +1,29 @@
 import React, { PropTypes } from 'react';
 import { Button, Text } from 'react-native';
+import Link from './Link';
+import { connect } from 'react-redux';
 
-const FilterLink = ({ filter, title, currentFilter, onClick }) => {
+class FilterLink extends React.Component {
 
-    if (filter === currentFilter) {
+    render() {
+        const props = this.props;
+        let active = props.visibilityFilter === props.filter;
+
         return (
-            <Text>{title}</Text>
+            <Link active={active} title={props.title} onClick={() => {
+                props.dispatch({ type: 'SET_VISIBILITY_FILTER', filter: props.filter });
+            }
+            } />
         );
     }
-    return (
-        <Button title={title} onPress={onClick}></Button>
-    );
+}
+
+
+const mapStateToProps = (state) => {
+    return {
+        visibilityFilter: state.visibilityFilter
+    };
 };
 
-FilterLink.propTypes = {
-    title: PropTypes.string.isRequired,
-    filter: PropTypes.string.isRequired,
-};
 
-export default FilterLink;
+export default connect(mapStateToProps)(FilterLink);

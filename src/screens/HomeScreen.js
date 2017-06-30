@@ -30,9 +30,7 @@ class HomeScreen extends React.Component {
         super(props);
         this.onAddClick = this.onAddClick.bind(this);
         this.onPressTodo = this.onPressTodo.bind(this);
-        // this.renderRowFunc = this.renderRowFunc.bind(this);
 
-        console.log('this.props constructor', this.props);
     }
 
     static navigationOptions = {
@@ -40,25 +38,16 @@ class HomeScreen extends React.Component {
     };
 
     onPressTodo(rowData) {
-        console.log('llego', rowData);
         this.props.dispatch({ type: types.TOGGLE_TODO, id: rowData.id });
     }
 
-
-    filterTodos(filter) {
-        this.props.dispatch({ type: 'SET_VISIBILITY_FILTER', filter });
-    }
-
     render() {
-        const { visibilityFilter } = this.props;
 
         return (
             <View style={styles.container}>
                 <AddTodo onAddClick={this.onAddClick} />
-
                 <TodoList onPressTodo={this.onPressTodo} datasource={this.props.datasource} />
-
-                <Footer visibilityFilter={visibilityFilter} onFilterClick={(filter) => this.filterTodos(filter)} />
+                <Footer />
             </View>
         );
     }
@@ -72,25 +61,10 @@ const dataSource = new ListView.DataSource({
     rowHasChanged: (r1, r2) => r1 !== r2,
 });
 
-const mapStateToProps = (state, ownProps) => {
-    console.log('state', state);
-    console.log('ownProps', ownProps);
+const mapStateToProps = (state) => {
     return {
         visibleTodos: getVisibleTodos(state.todos, state.visibilityFilter),
         datasource: dataSource.cloneWithRows(getVisibleTodos(state.todos, state.visibilityFilter)),
-        visibilityFilter: state.visibilityFilter
-    };
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        onAddClick: (id, text) => {
-            dispatch({
-                type: 'ADD_TODO',
-                id,
-                text,
-            });
-        }
     };
 };
 
