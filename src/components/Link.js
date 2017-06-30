@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Button, Text } from 'react-native';
+import { connect } from 'react-redux';
 
 const Link = ({ active, title, onClick }) => {
 
@@ -13,5 +14,18 @@ const Link = ({ active, title, onClick }) => {
     );
 };
 
+const mapStateToLinkProps = (state, ownProps) => {
+    return {
+        active: state.visibilityFilter === ownProps.filter
+    };
+};
 
-export default Link;
+const mapDispatchToLinkProps = (dispatch, ownProps) => {
+    return {
+        onClick: () => {
+            dispatch({ type: 'SET_VISIBILITY_FILTER', filter: ownProps.filter });
+        }
+    };
+};
+
+export default connect(mapStateToLinkProps, mapDispatchToLinkProps)(Link);
