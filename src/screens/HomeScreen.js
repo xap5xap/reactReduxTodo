@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as types from '../actions/actionTypes';
 import FilterLink from '../components/FilterLink';
 import TodoList from '../components/TodoList';
+import AddTodo from '../components/AddTodo';
 
 const getVisibleTodos = (todos, filter) => {
     switch (filter) {
@@ -26,7 +27,7 @@ class HomeScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.onTodoClick = this.onTodoClick.bind(this);
+        this.onAddClick = this.onAddClick.bind(this);
         this.onPressTodo = this.onPressTodo.bind(this);
         // this.renderRowFunc = this.renderRowFunc.bind(this);
 
@@ -52,10 +53,7 @@ class HomeScreen extends React.Component {
 
         return (
             <View style={styles.container}>
-                <TextInput style={styles.input} onChangeText={(text) => {
-                    this.input = text;
-                }}></TextInput>
-                <Button title="Add todo" onPress={this.onTodoClick} />
+                <AddTodo onAddClick={this.onAddClick}/>
 
                 <TodoList onPressTodo={this.onPressTodo} datasource={this.props.datasource} />
 
@@ -67,8 +65,8 @@ class HomeScreen extends React.Component {
         );
     }
 
-    onTodoClick() {
-        this.props.dispatch({ type: 'ADD_TODO', id: this.id++, text: this.input });
+    onAddClick(text) {
+        this.props.dispatch({ type: 'ADD_TODO', id: this.id++, text: text });
     }
 }
 
@@ -88,7 +86,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTodoClick: (id, text) => {
+        onAddClick: (id, text) => {
             dispatch({
                 type: 'ADD_TODO',
                 id,
@@ -106,13 +104,6 @@ const styles = StyleSheet.create({
         height: null,
         backgroundColor: 'rgba(0,0,0,0)',
     },
-    input: {
-        height: 19,
-        borderBottomColor: '#000',
-        borderBottomWidth: 5,
-        borderStyle: 'solid',
-    },
-
 });
 
 export default connect(mapStateToProps)(HomeScreen);
