@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Button, Text } from 'react-native';
 import { connect } from 'react-redux';
+import { setVisibilityFilter } from '../actions/addTodoActions';
 
 const Link = ({ active, title, onClick }) => {
 
@@ -23,7 +24,7 @@ const mapStateToLinkProps = (state, ownProps) => {
 const mapDispatchToLinkProps = (dispatch, ownProps) => {
     return {
         onClick: () => {
-            dispatch({ type: 'SET_VISIBILITY_FILTER', filter: ownProps.filter });
+            dispatch(setVisibilityFilter(ownProps.filter));
         }
     };
 };

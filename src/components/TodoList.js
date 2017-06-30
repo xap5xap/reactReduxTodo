@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { TouchableHighlight, Text, View, StyleSheet, ListView } from 'react-native';
 import Todo from './Todo';
 import { connect } from 'react-redux';
-import * as types from '../actions/actionTypes';
+import { toggleTodo } from '../actions/addTodoActions';
 
 
 const getVisibleTodos = (todos, filter) => {
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onPressTodo: (id) => {
-            dispatch({ type: types.TOGGLE_TODO, id });
+            dispatch(toggleTodo(id));
         }
     }
 };
